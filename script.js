@@ -57,12 +57,12 @@ async function connect() {
                 // naive getting welcome message
                 if(value_text.substring(0, 11) === "Flipper cli") {
                     messages_div.innerHTML += value_text;
+                    await writer.write(encoder.encode("screen_stream\r"));
                 }
 
                 // naive getting greeting message
                 if(value_text === ">: ") {
                     console.log("get greeting");
-                    await writer.write(encoder.encode("screen_stream\r"));
                 }
 
                 value.forEach(x => {
