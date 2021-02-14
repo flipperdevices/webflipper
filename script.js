@@ -5,7 +5,7 @@ let ctx = null;
 const SCREEN_HEIGHT = 64;
 const SCREEN_WIDTH = 128;
 
-const SCALE = 4;
+const SCALE = 8;
 
 function main() {
     let canvas = document.getElementById("canvas");
@@ -52,6 +52,7 @@ async function connect() {
                 let value_text = new TextDecoder("utf-8").decode(value);
 
                 // console.log(value, value_text);
+                console.log("get chunk");
 
                 // naive getting welcome message
                 if(value_text.substring(0, 11) === "Flipper cli") {
@@ -76,8 +77,11 @@ async function connect() {
                         if("" + preamble_buffer === "" + PREAMBLE) {
                             console.log("found preamble!");
                             buffer = [];
+                            preamble_buffer = [];
                         }
                     } else {
+                        buffer.push(x);
+
                         if(buffer.length === 1024) {
                             console.log("get 1024 bytes, draw and clean");
 
@@ -93,8 +97,6 @@ async function connect() {
 
                                     let pixel_value = buffer[i] & (1 << (y % 8));
 
-                                    // console.log(buffer[i], "&", (1 << (y % 8)), "===", pixel_value);
-
                                     if(pixel_value !== 0) {
                                         ctx.fillRect(x * SCALE, y * SCALE, SCALE, SCALE);
                                     }
@@ -103,8 +105,6 @@ async function connect() {
                             
 
                             buffer = null;
-                        } else {
-                            buffer.push(x);
                         }
                     }
                 });
